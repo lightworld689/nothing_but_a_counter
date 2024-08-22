@@ -53,6 +53,20 @@ class RequestHandler(BaseHTTPRequestHandler):
             }
             self.wfile.write(json.dumps(response_data).encode())
 
+    def do_POST(self):
+        # Add CORS headers for POST requests
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')  # Add this line to allow CORS
+        self.end_headers()
+
+        # Handle POST request logic here
+        response_data = {
+            "status": 200,
+            "description": "POST request handled"
+        }
+        self.wfile.write(json.dumps(response_data).encode())
+
 # Set up the server
 def run_server(port=1145):
     server_address = ('', port)
