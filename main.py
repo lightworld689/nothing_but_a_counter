@@ -1,12 +1,12 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 
-# 定义处理HTTP请求的类
+# Define the class to handle HTTP requests
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        # 检查请求路径
+        # Check the request path
         if self.path == '/' or self.path == '/readonly':
-            # 读取当前计数
+            # Read the current count
             try:
                 with open('number.txt', 'r') as f:
                     count = int(f.read().strip())
@@ -15,7 +15,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 with open('number.txt', 'w') as f:
                     f.write(str(count))
 
-            # 如果请求路径是 /readonly，则不增加计数
+            # If the request path is /readonly, do not increment the count
             if self.path == '/readonly':
                 response_data = {
                     "status": 200,
@@ -23,25 +23,25 @@ class RequestHandler(BaseHTTPRequestHandler):
                     "count": count
                 }
             else:
-                # 增加计数
+                # Increment the count
                 count += 1
                 with open('number.txt', 'w') as f:
                     f.write(str(count))
 
-                # 准备响应数据
+                # Prepare the response data
                 response_data = {
                     "status": 200,
                     "description": "Nothing but a counter.",
                     "count": count
                 }
 
-            # 发送响应
+            # Send the response
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(response_data).encode())
         else:
-            # 返回404状态码
+            # Return 404 status code
             self.send_response(404)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
@@ -51,13 +51,13 @@ class RequestHandler(BaseHTTPRequestHandler):
             }
             self.wfile.write(json.dumps(response_data).encode())
 
-# 设置服务器
+# Set up the server
 def run_server(port=1145):
     server_address = ('', port)
     httpd = HTTPServer(server_address, RequestHandler)
-    print(f'服务器正在监听端口 {port}...')
+    print(f'Server is listening on port {port}...')
     httpd.serve_forever()
 
-# 运行服务器
+# Run the server
 if __name__ == '__main__':
     run_server()
