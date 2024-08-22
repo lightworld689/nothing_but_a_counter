@@ -38,12 +38,14 @@ class RequestHandler(BaseHTTPRequestHandler):
             # Send the response
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')  # Add this line to allow CORS
             self.end_headers()
             self.wfile.write(json.dumps(response_data).encode())
         else:
             # Return 404 status code
             self.send_response(404)
             self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')  # Add this line to allow CORS
             self.end_headers()
             response_data = {
                 "status": 404,
